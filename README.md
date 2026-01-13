@@ -1,9 +1,9 @@
-# Employee Management System (Python)
+# Employee Management System 
 
 This project is **Task 1** of my training program.  
 It is a **Python-based Employee Management System** that allows managing employees, their types, and salary calculation using different strategies.
 
----
+
 
 ## Features
 - Add a new employee
@@ -13,7 +13,7 @@ It is a **Python-based Employee Management System** that allows managing employe
 - Calculate total salary
 - Input validation (name, birthday, email)
 
----
+
 
 ## Technologies Used
 - Python
