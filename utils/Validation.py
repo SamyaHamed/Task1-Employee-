@@ -39,12 +39,6 @@ def email_exists(filename,email):
 
 
 
-#name validate --> done
-# pass age --> age
-# date --> age
-# email validate --> done
-
-#database store data csv file
 
 
 
