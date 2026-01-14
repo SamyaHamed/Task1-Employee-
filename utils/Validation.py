@@ -1,9 +1,26 @@
 import csv
 import os.path
+import utils.constants as const
 
 from email_validator import validate_email, EmailNotValidError
 import re
-from datetime  import datetime
+from datetime import datetime, date
+
+
+
+def validate_employee(**kwargs):
+    validators = {
+        "name": name_validation,
+        "email": email_validation,
+        "birthday": birthday_validation,
+    }
+    for attr , validator in validators.items():
+        value = kwargs.get(attr)
+        if not validator(value):
+            raise ValueError(f"Invalid value for {attr}")
+    return True
+
+
 
 def email_validation(email):
     try:
@@ -18,13 +35,21 @@ def name_validation(name):
     else:
         return True
 
+
 def birthday_validation(birthday):
     try:
-        birth_date = datetime.strptime(birthday, '%m/%d/%Y').date()
-        age = (datetime.today().year-birth_date.year)
-        return age >= 18
-    except ValueError :
+        if isinstance(birthday, date):
+            birth_date = birthday
+        elif isinstance(birthday, str):
+            birth_date = datetime.strptime(birthday, const.DATE_FORMAT).date()
+        else:
+            return False
+        age = datetime.today().year - birth_date.year
+        return age >= const.MIN_AGE
+    except ValueError:
         return False
+
+
 
 def email_exists(filename,email):
     if not os.path.exists(filename):
@@ -32,21 +57,9 @@ def email_exists(filename,email):
     with open(filename,'r',newline='',encoding='utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            if row['email'].lower() == email.lower():
+            if row['Email'].lower() == email.lower():
                 return True
 
         return False
-
-
-
-#name validate --> done
-# pass age --> age
-# date --> age
-# email validate --> done
-
-#database store data csv file
-
-
-
 
 

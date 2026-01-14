@@ -1,9 +1,13 @@
 from models.Employee import Employee
 from strategies.SalaryStrategy import PartTimeStrategy, FullTimeStrategy
-from utils.Validation import *
 from managers.EmployeeManager import EmployeeManager
+import utils.constants as const
+from  utils import input_helpers
+from utils.input_helpers import employee_input, add_period_input
 
 manager = EmployeeManager()
+manager.load_employees()
+manager.load_history()
 while True:
     print("\n\n Welcome to the Control Panel!")
     print("Please choose one of the options below to get started:")
@@ -16,34 +20,13 @@ while True:
     choice = input()
     match choice:
         case "1":
-            name = input("Enter Employee Name: ")
-            if not name_validation(name):
-                print("Invalid Name")
-                continue
-
-            birthday = input("Enter your date of birth(MM/DD/YYYY): ")
-            if not birthday_validation(birthday):
-                print("Invalid Age")
-                continue
-
-            email = input("Enter Employee Email: ")
-            if not email_validation(email):
-                print("Invalid Email")
-                continue
-
-            salary = float(input("Enter Employee Salary: "))
-            employee_type = input("Enter Employee Strategy(part/full): ").lower()
-            if employee_type == "part":
-                strategy = PartTimeStrategy()
-            else:
-                strategy = FullTimeStrategy()
-
+            name ,birthday ,email , salary ,strategy = employee_input()
             employee = Employee(name, birthday, email)
             manager.add_employee(employee, strategy, salary)
 
         case "2":
             email = input("Enter Employee Email: ").strip()
-            manager.remove_employee("data/employees.csv",email)
+            manager.remove_employee(const.EMPLOYEE_FILE,email)
 
         case"3":
             email = input("Enter Employee Email: ").strip()
@@ -52,13 +35,9 @@ while True:
                 print("Employee not found")
                 continue
 
-            salary = float(input("Enter Employee Salary: "))
-            employee_type = input("Enter Employee Strategy(part/full): ").lower()
-            if employee_type == "part":
-                strategy = PartTimeStrategy()
-            else:
-                strategy = FullTimeStrategy()
+            salary ,strategy = add_period_input()
             emp.add_period(strategy,salary)
+            manager.save_history()
             print("Employee Strategy Converted Successfully!")
 
         case "4":

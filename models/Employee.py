@@ -1,23 +1,16 @@
 from .EmploymentHistory import EmploymentHistory
 from datetime import date, datetime
-
+import utils.constants as const
 
 class Employee:
-    _id_counter = 1
-
     def __init__(self,name,birthday,email):
-        self._employee_id = Employee._id_counter
-        Employee._id_counter += 1
         self.name = name
-        self.birthday = datetime.strptime(birthday, "%m/%d/%Y").date()
+        self.birthday = datetime.strptime(birthday, const.DATE_FORMAT).date()
         self.email = email
         self.history = []
 
 
 
-    @property
-    def employee_id(self):
-        return self._employee_id
 
     def add_period(self, strategy, salary):
         if self.history:
@@ -25,6 +18,7 @@ class Employee:
 
         period = EmploymentHistory( strategy,salary,date.today())
         self.history.append(period)
+
 
     def calculate_salary(self):
         total = 0
@@ -41,7 +35,6 @@ class Employee:
 
 
     def display(self):
-        print("Employee id :",self.employee_id)
         print("Employee name:",self.name)
         print("Employee age:",(date.today().year-self.birthday.year))
         print("Employee email:",self.email)
